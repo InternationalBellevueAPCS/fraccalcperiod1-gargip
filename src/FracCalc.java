@@ -2,21 +2,11 @@ import java.util.*;
 public class FracCalc {
 
     public static void main (String[] args) {
-    	Scanner console = new Scanner (System.in); 
+    	Scanner console = new Scanner (System.in); //creates Scanner to read equation
         System.out.print ("Input your equation (type 'quit' to quit): ");
-        String input = console.nextLine ();      
+        String input = console.nextLine (); //makes String 'input' to hold equation
         while (!(input.equals("quit"))) {
-        	String answer = produceAnswer (input); //calls produceAnswer
-        	String solution[] = answer.split(" ");
-        	if (solution.length == 1) { //if the answer is an integer
-        		System.out.println(solution[0]);
-        	}
-        	if (solution.length == 2) {//if the answer is a reduced fraction
-        		System.out.println(solution[0] + "/" + solution[1]);
-        	}
-        	if (solution.length == 3) {//if the answer is a mixed fraction
-        		System.out.println(solution[0] + "_" + solution[1] + "/" + solution[2]);
-        	}
+        	System.out.println(produceAnswer(input));//calls produceAnswer
         	System.out.print ("Input your equation (print 'quit' to quit): ");
         	input = console.nextLine ();
     	}	        
@@ -34,27 +24,27 @@ public class FracCalc {
 	    }
 	    if (equation[1].equals("*")) { //checks whether the equation needs to multiply
 	    	int [] answer = multiply (operand1, operand2);
-	    	return returner (answer);
+	    	return answerFormatter (answer);
 	    }
 	    if (equation[1].equals("/")) { //checks whether the equation needs to divide
 	    	int [] answer = divide (operand1, operand2);
-	    	return returner (answer);
+	    	return answerFormatter (answer);
 	    }
 	    if (equation[1].equals("+")) { //checks whether the equation needs to add
 	    	int [] answer = addition (operand1, operand2);
-	    	return returner (answer);
+	    	return answerFormatter (answer);
 	    }
 	    if (equation[1].equals("-")) { //checks whether the equation needs to subtract
 	    	int [] answer = subtraction (operand1, operand2);
-	    	return returner (answer);
+	    	return answerFormatter (answer);
 	    }
 	    else {
-	    	String boi = "Please enter a valid operator.";
-	    	return boi;
+	    	String invalid = "Please enter a valid operator.";
+	    	return invalid;
 	    }
     }
     
-    public static String returner (int[] answer) {
+    public static String answerFormatter (int[] answer) { //formats the answer as a fraction or integer
     	reduce (answer);
     	if (answer[2] == 1 || answer[1] == 0) { //if the answer is an integer or zero
     		return Integer.toString(answer[1]);
@@ -63,13 +53,13 @@ public class FracCalc {
     		String whole = Integer.toString(answer[0]);
     		String numerator = Integer.toString(answer[1]);
     		String denominator = Integer.toString(answer[2]);
-    		return whole + " " + numerator + " " + denominator;
+    		return whole + "_" + numerator + "/" + denominator;
     	}
     	else {
     		String numerator = Integer.toString(answer[1]);
     		String denominator = Integer.toString(answer[2]);
-    		return numerator + " " + denominator;
-    	}
+    		return numerator + "/" + denominator;
+    	}    	
     }
 	public static int[] operandHolder (String operand) { //returns the numerator, denominator, and whole number for each operand
     	int mixedChecker = operand.indexOf("_"); //checks if the operand is a mixed fraction by searching for '_'
