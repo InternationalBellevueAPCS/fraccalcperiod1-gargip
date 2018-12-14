@@ -6,61 +6,45 @@ public class FracCalc {
         System.out.print ("Input your equation (type 'quit' to quit): ");
         String input = console.nextLine (); //makes String 'input' to hold equation
         while (!(input.equals("quit"))) {
-        	System.out.println(produceAnswer(input));//calls produceAnswer
+        	System.out.println(produceAnswer(input));//calls produceAnswer with equation as actual parameter
         	System.out.print ("Input your equation (print 'quit' to quit): ");
-        	input = console.nextLine ();
+        	input = console.nextLine (); //makes 'input' equal to the next equation
     	}	        
     }
     
     public static String produceAnswer (String input) {
-    	String equation[] = input.split(" "); //splits the input into two operands and one operator and makes an array with them
-	    int [] operand1 = operandHolder (equation[0]); //finds the num, denom, and whole for the first operand and puts into array 'operand1'
-	    int [] operand2 = operandHolder(equation[2]); //finds the num, denom, and whole for the second operand and puts into array 'operand2'
-	    if (operand1[0] != 0) { //if operand1 is a mixed fraction
-	    	operand1 = improper(operand1); //makes operand1 an improper fraction
+    	String equation[] = input.split(" "); //splits the input around the spaces and makes a String array to hold the three value
+	    int [] operand1 = operandHolder (equation[0]); //creates array 'operand1' & calls 'operandHolder' to fill 'operand1' with numerator, denom, and whole #
+	    int [] operand2 = operandHolder(equation[2]); //creates array 'operand2' & calls 'operandHolder' to fill 'operand1' with numerator, denom, and whole #
+	    if (operand1[0] != 0) { //checks if operand1 is a mixed fraction
+	    	operand1 = improper(operand1); //calls 'improper' method to make operand1 an improper fraction
 	    }
-	    if (operand2[0] != 0) { //if operand2 is a mixed fraction
-	    	operand2 = improper(operand2); //makes operand2 an improper fraction
+	    if (operand2[0] != 0) { //checks if operand2 is a mixed fraction
+	    	operand2 = improper(operand2); //calls 'improper' method to make operand2 an improper fraction
 	    }
-	    if (equation[1].equals("*")) { //checks whether the equation needs to multiply
-	    	int [] answer = multiply (operand1, operand2);
+	    if (equation[1].equals("*")) { //checks whether the equation needs to multiply operands
+	    	int [] answer = multiply (operand1, operand2);//creates array 'answer' to hold values of the answer and calls 'multiply' to get values
+	    	return answerFormatter (answer); //calls answerFormatter to get the String that needs to be returned, and returns it
+	    }
+	    if (equation[1].equals("/")) { //checks whether the equation needs to divide operands
+	    	int [] answer = divide (operand1, operand2);//creates array 'answer' to hold values of the answer and calls 'divide' to get values
 	    	return answerFormatter (answer);
 	    }
-	    if (equation[1].equals("/")) { //checks whether the equation needs to divide
-	    	int [] answer = divide (operand1, operand2);
+	    if (equation[1].equals("+")) { //checks whether the equation needs to add operands
+	    	int [] answer = addition (operand1, operand2);//creates array 'answer' to hold values of the answer and calls 'addition' to get values
 	    	return answerFormatter (answer);
 	    }
-	    if (equation[1].equals("+")) { //checks whether the equation needs to add
-	    	int [] answer = addition (operand1, operand2);
+	    if (equation[1].equals("-")) { //checks whether the equation needs to subtract operands
+	    	int [] answer = subtraction (operand1, operand2);//creates array 'answer' to hold values of the answer and calls 'subtraction' to get values
 	    	return answerFormatter (answer);
 	    }
-	    if (equation[1].equals("-")) { //checks whether the equation needs to subtract
-	    	int [] answer = subtraction (operand1, operand2);
-	    	return answerFormatter (answer);
-	    }
-	    else {
+	    else {//returns String telling user that the operator was invalid
 	    	String invalid = "Please enter a valid operator.";
 	    	return invalid;
 	    }
     }
     
-    public static String answerFormatter (int[] answer) { //formats the answer as a fraction or integer
-    	reduce (answer);
-    	if (answer[2] == 1 || answer[1] == 0) { //if the answer is an integer or zero
-    		return Integer.toString(answer[1]);
-    	}
-    	else if (answer[0] != 0) {//if the fraction is improper
-    		String whole = Integer.toString(answer[0]);
-    		String numerator = Integer.toString(answer[1]);
-    		String denominator = Integer.toString(answer[2]);
-    		return whole + "_" + numerator + "/" + denominator;
-    	}
-    	else {
-    		String numerator = Integer.toString(answer[1]);
-    		String denominator = Integer.toString(answer[2]);
-    		return numerator + "/" + denominator;
-    	}    	
-    }
+    
 	public static int[] operandHolder (String operand) { //returns the numerator, denominator, and whole number for each operand
     	int mixedChecker = operand.indexOf("_"); //checks if the operand is a mixed fraction by searching for '_'
 	    if (mixedChecker == -1) { //if not a mixed fraction...
@@ -104,7 +88,7 @@ public class FracCalc {
     	int numerator = (array1[0] * array1[2]) + array1[1]; //changes numerator so fraction becomes improper
         if (array1[1] == 1 && array1[2] == 1) {
 		numerator = numerator - 1;
-	}
+        }
     	int [] arrayFinal = {0, numerator, array1[2]}; //makes array with whole = 0, new numerator, and original denom.
     	return arrayFinal; //returns array with whole, num, and denom values
     }
@@ -165,29 +149,26 @@ public class FracCalc {
     		array1[2] = array1[2] / divisor;//divides denominator by gcd
     	}
     	if (Math.abs(array1[1]) > array1[2]) {//if the fraction is improper, turn it into mixed
-    			if (array1[2] == 1) {
+    			if (array1[2] == 1) { //checks if the inputed array represents an integer
     				return array1;
     			}
     			boolean isNegative = false;
-    			if (array1[1] < 0) {
-    				isNegative = true;
-    				array1[1] *= -1;
+    			if (array1[1] < 0) {//checks if the numerator is negative
+    				isNegative = true;//makes the fact that the number is negative true
+    				array1[1] *= -1;//makes nuemrator positive
     			}
     			while (array1[1] > array1[2]) {
-    				array1[1] = array1[1] - array1[2];
-    				array1[0]++;
+    				array1[1] = array1[1] - array1[2];//subtracts denominator from numerator
+    				array1[0]++;//adds one to the whole number value
     			}
-    			if (isNegative == true && array1[0] != 0) {
-    				array1[0] *= -1;
+    			if (isNegative == true && array1[0] != 0) {//checks if the numerator was negative and not zero
+    				array1[0] *= -1;//makes whole number negative 
     			}
-    			else if (isNegative == true) {
-    				array1[1] *= -1;
+    			else if (isNegative == true) {//checks if numerator was negative
+    				array1[1] *= -1;//makes numerator negative
     			}
     	}
-    	return array1;
-    	/*else {
-    		return array1;
-    	}*/
+    	return array1;//returns array with whole, nuemrator, and denominator values
     }
     
     public static boolean canItReduce (int[] array1) { //checks if a fraction can be reduced
@@ -197,6 +178,24 @@ public class FracCalc {
     		}
     	}
     	return false;
+    }
+    
+    public static String answerFormatter (int[] answer) { //formats the answer as a fraction or integer
+    	reduce (answer);//reduces answer
+    	if (answer[2] == 1 || answer[1] == 0) { //checks if the answer is a non-zero integer or zero
+    		return Integer.toString(answer[1]);//returns the integer
+    	}
+    	else if (answer[0] != 0) {//checks if the fraction is improper
+    		String whole = Integer.toString(answer[0]);//assigns first value in array to 'whole'
+    		String numerator = Integer.toString(answer[1]);//assigns second value in array to 'numerator'
+    		String denominator = Integer.toString(answer[2]);//assigns third value in array to 'denominator'
+    		return whole + "_" + numerator + "/" + denominator;//returns String with formatted mixed fraction
+    	}
+    	else {//returns a regular fraction (one that's mixed)
+    		String numerator = Integer.toString(answer[1]);//assigns second value in 'answer' to numerator
+    		String denominator = Integer.toString(answer[2]);//assigns third value in 'answer' to denominator
+    		return numerator + "/" + denominator;//returns String with formatted regular fraction
+    	}    	
     }
     
     /**
