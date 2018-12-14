@@ -12,7 +12,7 @@ public class FracCalc {
     	}	        
     }
     
-    public static void produceAnswer(String input) {
+    public static String produceAnswer(String input) {
     	String equation[] = input.split(" "); //splits the input into two operands and one operator and makes an array with them
 	    int [] operand1 = operandHolder (equation[0]); //finds the num, denom, and whole for the first operand and puts into array 'operand1'
 	    int [] operand2 = operandHolder(equation[2]); //finds the num, denom, and whole for the second operand and puts into array 'operand2'
@@ -28,7 +28,7 @@ public class FracCalc {
 	    	if (answer[2] == 1) { //if the answer is an integer
 	    		System.out.println(answer[1]);
 	    	}
-	    	if (answer[0] > 0) {//if the fraction is improper
+	    	else if (answer[0] > 0) {//if the fraction is improper
 	    		System.out.println(answer[0] + "_" + answer[1] + "/" + answer[2]);
 	    	}
 	    	else {
@@ -41,7 +41,7 @@ public class FracCalc {
 	    	if (answer[2] == 1) { //if the answer is an integer
 	    		System.out.println(answer[1]);
 	    	}
-	    	if (answer[0] > 0) {//if the fraction is improper
+	    	else if (answer[0] > 0) {//if the fraction is improper
 	    		System.out.println(answer[0] + "_" + answer[1] + "/" + answer[2]);
 	    	}
 	    	else {
@@ -54,7 +54,7 @@ public class FracCalc {
 	    	if (answer[2] == 1) { //if the answer is an integer
 	    		System.out.println(answer[1]);
 	    	}
-	    	if (answer[0] > 0) {//if the fraction is improper
+	    	else if (answer[0] > 0) {//if the fraction is improper
 	    		System.out.println(answer[0] + "_" + answer[1] + "/" + answer[2]);
 	    	}
 	    	else {
@@ -67,7 +67,7 @@ public class FracCalc {
 	    	if (answer[2] == 1) { //if the answer is an integer
 	    		System.out.println(answer[1]);
 	    	}
-	    	if (answer[0] > 0) {//if the fraction is improper
+	    	else if (answer[0] > 0) {//if the fraction is improper
 	    		System.out.println(answer[0] + "_" + answer[1] + "/" + answer[2]);
 	    	}
 	    	else {
@@ -168,6 +168,9 @@ public class FracCalc {
     		array1[1] = array1[1] / divisor;//divides numerator by gcd
     		array1[2] = array1[2] / divisor;//divides denominator by gcd
     		if (array1[1] > array1[2]) {//if the fraction is improper, turn it into mixed
+    			if (array1[2] == 1) {
+    				return array1;
+    			}
     			while (array1[1] > array1[2]) {
     				array1[1] = array1[1] - array1[2];
     				array1[0]++;
@@ -181,8 +184,8 @@ public class FracCalc {
     }
     
     public static boolean canItReduce (int[] array1) { //checks if a fraction can be reduced
-    	for (int i = 2; i < array1[1]; i++) {
-    		if (array1[1] % i == 0 && array1[2] % i == 0) { //checks which number the num and denom can be divided by
+    	for (int i = 2; i <= array1[1]; i++) {
+    		if (array1[1] % i == 0 && array1[2] % i == 0) { //checks which number the num and denom have a common divisor
     			return true;
     		}
     	}

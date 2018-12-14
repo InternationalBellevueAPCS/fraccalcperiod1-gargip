@@ -43,7 +43,7 @@ public class FracCalcTestALL
             // Passed
             return;
         }
-        
+        System.out.println("temp");
         System.err.println("FAILURE: Your calculator's answer: '" + candidate + "' did not match the expected answer(s) below");
         if (answer1 != null)
         {
