@@ -86,6 +86,9 @@ public class FracCalc {
     
     public static int[] improper (int [] array1) { //makes a mixed fraction improper and returns an array
     	int numerator = (array1[0] * array1[2]) + array1[1]; //changes numerator so fraction becomes improper
+    	if (array1[0] < 0) { //checks if fraction is negative
+    		numerator = (array1[0] * array1[2]) - array1[1];//changes numerator so fraction becomes improper
+    	}
         if (array1[1] == 1 && array1[2] == 1) {
 		numerator = numerator - 1;
         }
